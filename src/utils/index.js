@@ -8,7 +8,7 @@ const path = require('node:path');
 
 // Get objects from discord,js library
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const conf = require('../config.json');
+const conf = require('../../config.json');
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -18,7 +18,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 
 // Helps to construct a path to the folder's commands directory.
-const foldersPath = path.join(__dirname, 'commands');
+const foldersPath = path.join(__dirname, 'src/commands');
 
 // Read sub-folders path
 const commandFolders = fs.readdirSync(foldersPath)
@@ -51,7 +51,7 @@ for (const folder of commandFolders)
 client.on(Events.InteractionCreate, async interaction => {
     // Not every interaction is a slash command 
     if (!interaction.isChatInputCommand()) return;
-	console.log(interaction);
+	console.log("[[INTERACTION]]: ", interaction);
 
 
 	try {
