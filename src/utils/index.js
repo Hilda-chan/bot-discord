@@ -8,6 +8,7 @@ const path = require('node:path');
 
 // Get objects from discord,js library
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+
 const conf = require('../../config.json');
 
 // Create a new client instance
@@ -18,7 +19,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 
 // Helps to construct a path to the folder's commands directory.
-const foldersPath = path.join(__dirname, 'src/commands');
+const foldersPath = path.join(__dirname, '../commands');
 
 // Read sub-folders path
 const commandFolders = fs.readdirSync(foldersPath)
@@ -53,6 +54,11 @@ client.on(Events.InteractionCreate, async interaction => {
     if (!interaction.isChatInputCommand()) return;
 	console.log("[[INTERACTION]]: ", interaction);
 
+	const command = interaction.client.commands.get(interaction.commandName);
+	if (!command) {
+		console.error(`No command matching ${interaction.commandName} was found.`);
+		return;
+	}
 
 	try {
 		await command.execute(interaction);
