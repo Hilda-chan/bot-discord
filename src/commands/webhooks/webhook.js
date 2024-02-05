@@ -15,15 +15,15 @@ module.exports =
         .addStringOption(option => option.setName('wb-token').setDescription('The token of the webhook').setRequired(true))),
     async execute (interaction)
     {
-        if (!interaction.member.permission.has(PermissionsBitField.Flags.Administrator)) return await interaction.reply({ content: 'Must be Admin to manage webhook', ephemeral: true});
-        const sub = interaction.option.getSubcommand();
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.reply({ content: 'Must be Admin to manage webhook', ephemeral: true});
+        const sub = interaction.options.getSubcommand();
 
         switch (sub)
         {
             case 'add':
                 await interaction.deferReply({ ephemeral: true});
                 const name = await interaction.options.getString('name');
-                const channel = await interaction.options.getString('channel');
+                const channel = await interaction.options.getChannel('channel');
                 const webhook = await channel.createWebhook(
                     {
                         name: name,
@@ -32,14 +32,15 @@ module.exports =
                         {
                             return interaction.editReply({content: 'Error in add webhook'})
                         });
+
                 const embed = new EmbedBuilder()
                 .setColor("Red")
                 .setDescription(':white_check_mark: Webhook created successfully')
                 .addFields({ name: 'Webhook name', value: `> ${name}`, inline: true})
-                .addFields({ channel: 'Webhook channel', value: `> ${channel}`, inline: true})
-                .addFields({ name: 'Webhook URL', value: `> https://discord.com/api/webhooks/${webhook.id}/${webhook.token}`, inline: true});
+                .addFields({ name: 'Webhook channel', value: `> ${channel.toString()}`, inline: true})
+                .addFields({ name: 'Webhook URL', value: `> https://discord.com/api/webhooks/${webhook.id}/${webhook.token}`, inline: true})
 
-                await interaction.editReply({ embed: [embed], ephemeral: true});
+                await interaction.editReply({embeds: [embed], ephemeral: true});
 
                 try
                 {
