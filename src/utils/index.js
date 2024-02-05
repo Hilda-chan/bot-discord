@@ -35,6 +35,9 @@ for (const folder of commandFolders)
 	// Filter removes any non-JavaScript files from the array.  
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
+	console.log(commandsPath)
+	console.log(commandFiles)
+
 	for (const file of commandFiles) 
 	{
 		const filePath = path.join(commandsPath, file);
@@ -74,7 +77,15 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 
-client.once('ready', c => {console.log(`Hello, ${c.user.tag}!`)});
+client.once('ready', c => {
+	console.log(`Hello, ${c.user.tag}!`)
+});
+
+
+
+client.on('messageCreate', (message) => {
+	message.reply("FILS DE PUTE");
+});
 
 client.login(conf.bot_token);
 
